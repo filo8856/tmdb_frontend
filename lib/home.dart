@@ -6,6 +6,7 @@ import 'package:tmdb/herocard.dart';
 import 'package:tmdb/models.dart';
 import 'package:tmdb/moviecard.dart';
 import 'package:tmdb/fetch.dart';
+import 'package:tmdb/search.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -34,6 +35,13 @@ class _HomeState extends State<Home> {
         _currentPage = _pageController.page!;
       });
     });
+  }
+
+  @override
+  void dispose() {
+    // optional but clean
+    _pageController.dispose();
+    super.dispose();
   }
 
   @override
@@ -66,7 +74,23 @@ class _HomeState extends State<Home> {
               child: IconButton(
                 icon: Icon(Icons.search, color: Colors.yellow, size: 40.h),
                 onPressed: () {
-                  print("Search clicked");
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          Search(),
+
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+
+                      transitionDuration: Duration(milliseconds: 300),
+                    ),
+                  );
                 },
               ),
             ),
@@ -141,12 +165,39 @@ class _HomeState extends State<Home> {
                         horizontal: 8.w,
                         vertical: 20.h,
                       ),
-                      child: BigMovieCard(
-                        imageUrl: movie.posterUrl,
-                        title: movie.title,
-                        genres: movie.genres,
-                        year: movie.releaseYear,
-                        rating: movie.rating,
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            PageRouteBuilder(
+                              pageBuilder:
+                                  (context, animation, secondaryAnimation) =>
+                                      Desc(id: movie.movieId),
+
+                              transitionsBuilder:
+                                  (
+                                    context,
+                                    animation,
+                                    secondaryAnimation,
+                                    child,
+                                  ) {
+                                    return FadeTransition(
+                                      opacity: animation,
+                                      child: child,
+                                    );
+                                  },
+
+                              transitionDuration: Duration(milliseconds: 300),
+                            ),
+                          );
+                        },
+                        child: BigMovieCard(
+                          imageUrl: movie.posterUrl,
+                          title: movie.title,
+                          genres: movie.genres,
+                          year: movie.releaseYear,
+                          rating: movie.rating,
+                        ),
                       ),
                     ),
                   );
