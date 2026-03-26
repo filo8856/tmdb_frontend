@@ -16,8 +16,30 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Set<String> selectedGenres = {"All"};
   Map<String, List<Movie>> group = {};
   late PageController _pageController;
+  void toggleGenre(String genre) {
+    setState(() {
+      if (genre == "All") {
+        selectedGenres = {"All"};
+      } else {
+        selectedGenres.remove("All");
+
+        if (selectedGenres.contains(genre)) {
+          selectedGenres.remove(genre);
+        } else {
+          selectedGenres.add(genre);
+        }
+
+        // if nothing selected → fallback to All
+        if (selectedGenres.isEmpty) {
+          selectedGenres = {"All"};
+        }
+      }
+    });
+  }
+
   double _currentPage = 0;
   @override
   void initState() {
@@ -145,6 +167,41 @@ class _HomeState extends State<Home> {
         body: ListView(
           children: [
             SizedBox(
+              height: 40.h,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                children: [
+                  ...["All", ...group.keys].map((genre) {
+                    final isSelected = selectedGenres.contains(genre);
+
+                    return GestureDetector(
+                      onTap: () => toggleGenre(genre),
+                      child: Container(
+                        margin: EdgeInsets.only(right: 10.w),
+                        padding: EdgeInsets.symmetric(horizontal: 16.w),
+                        decoration: BoxDecoration(
+                          color: isSelected
+                              ? Colors.yellow
+                              : const Color(0xFF1E2A3A),
+                          borderRadius: BorderRadius.circular(25.r),
+                        ),
+                        alignment: Alignment.center,
+                        child: Text(
+                          genre,
+                          style: TextStyle(
+                            color: isSelected ? Colors.black : Colors.white,
+                            fontSize: 13.w,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ],
+              ),
+            ),
+            SizedBox(
               height: 400.h,
               child: PageView.builder(
                 controller: _pageController,
@@ -206,88 +263,94 @@ class _HomeState extends State<Home> {
             ),
 
             SizedBox(height: 10.h),
-            ...group.entries.map((entry) {
-              final genre = entry.key;
-              final movies = entry.value;
+            ...group.entries
+                .where((entry) {
+                  if (selectedGenres.contains("All")) return true;
+                  return selectedGenres.contains(entry.key);
+                })
+                .map((entry) {
+                  final genre = entry.key;
+                  final movies = entry.value;
 
-              if (movies.isEmpty) return const SizedBox(); // skip empty genres
+                  if (movies.isEmpty)
+                    return const SizedBox(); // skip empty genres
 
-              return Padding(
-                padding: EdgeInsets.symmetric(),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // 🎯 Genre Title
-                    Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Text(
-                        genre,
-                        style: TextStyle(
-                          fontSize: 18.w,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ),
-
-                    SizedBox(height: 5.h),
-
-                    // 🎬 Horizontal movie list
-                    SizedBox(
-                      height: 220.h,
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w),
-                        child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
+                  return Padding(
+                    padding: EdgeInsets.symmetric(),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // 🎯 Genre Title
+                        Padding(
                           padding: EdgeInsets.symmetric(horizontal: 10.w),
-                          itemCount: movies.length,
-                          itemBuilder: (context, index) {
-                            final movie = movies[index];
+                          child: Text(
+                            genre,
+                            style: TextStyle(
+                              fontSize: 18.w,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
 
-                            return GestureDetector(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  PageRouteBuilder(
-                                    pageBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                        ) => Desc(id: movie.movieId),
+                        SizedBox(height: 5.h),
 
-                                    transitionsBuilder:
-                                        (
-                                          context,
-                                          animation,
-                                          secondaryAnimation,
-                                          child,
-                                        ) {
-                                          return FadeTransition(
-                                            opacity: animation,
-                                            child: child,
-                                          );
-                                        },
+                        // 🎬 Horizontal movie list
+                        SizedBox(
+                          height: 220.h,
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 10.w),
+                            child: ListView.builder(
+                              scrollDirection: Axis.horizontal,
+                              padding: EdgeInsets.symmetric(horizontal: 10.w),
+                              itemCount: movies.length,
+                              itemBuilder: (context, index) {
+                                final movie = movies[index];
 
-                                    transitionDuration: Duration(
-                                      milliseconds: 300,
-                                    ),
+                                return GestureDetector(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                            ) => Desc(id: movie.movieId),
+
+                                        transitionsBuilder:
+                                            (
+                                              context,
+                                              animation,
+                                              secondaryAnimation,
+                                              child,
+                                            ) {
+                                              return FadeTransition(
+                                                opacity: animation,
+                                                child: child,
+                                              );
+                                            },
+
+                                        transitionDuration: Duration(
+                                          milliseconds: 300,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                  child: MovieCard(
+                                    imageUrl: movie.posterUrl,
+                                    title: movie.title,
                                   ),
                                 );
                               },
-                              child: MovieCard(
-                                imageUrl: movie.posterUrl,
-                                title: movie.title,
-                              ),
-                            );
-                          },
+                            ),
+                          ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              );
-            }),
+                  );
+                }),
           ].toList(),
         ),
       ),
