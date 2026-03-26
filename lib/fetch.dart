@@ -18,6 +18,16 @@ class ApiService {
     }
   }
 
+  static Future<Map<String, dynamic>> fetchMovieById(int id) async {
+    final response = await http.get(Uri.parse('$baseUrl/movies/$id'));
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body); // ✅ already a Map
+    } else {
+      throw Exception('Failed to load movie');
+    }
+  }
+
   static Future<List<Map<String, dynamic>>> fetchGen() async {
     final response = await http.get(Uri.parse('$baseUrl/genres'));
 

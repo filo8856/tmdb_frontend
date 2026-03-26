@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tmdb/desc.dart';
 import 'package:tmdb/herocard.dart';
 import 'package:tmdb/models.dart';
 import 'package:tmdb/moviecard.dart';
@@ -131,9 +132,41 @@ class _HomeState extends State<Home> {
                           itemBuilder: (context, index) {
                             final movie = movies[index];
 
-                            return MovieCard(
-                              imageUrl: movie.posterUrl,
-                              title: movie.title,
+                            return GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  PageRouteBuilder(
+                                    pageBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                        ) => Desc(id: movie.movieId),
+
+                                    transitionsBuilder:
+                                        (
+                                          context,
+                                          animation,
+                                          secondaryAnimation,
+                                          child,
+                                        ) {
+                                          return FadeTransition(
+                                            opacity: animation,
+                                            child: child,
+                                          );
+                                        },
+
+                                    transitionDuration: Duration(
+                                      milliseconds: 300,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: MovieCard(
+                                imageUrl: movie.posterUrl,
+                                title: movie.title,
+                              ),
                             );
                           },
                         ),
