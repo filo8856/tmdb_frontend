@@ -14,26 +14,26 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 160.w,
-      margin: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+      width: 100.w,
+      margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 🔳 Image Card
           ClipRRect(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(10.r),
             child: Container(
-              height: 200.h,
-              width: double.infinity,
+              height: 150.h,
+              width: 100.w,
               color: Colors.grey.shade200,
               child: Image.network(
                 imageUrl,
-                fit: BoxFit.cover,
+                fit: BoxFit.fill,
               ),
             ),
           ),
 
-          SizedBox(height: 10.h),
+          SizedBox(height: 5.h),
 
           // 🎬 Title
           Flexible(
