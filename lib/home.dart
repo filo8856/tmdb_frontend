@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tmdb/bookmarked.dart';
 import 'package:tmdb/desc.dart';
 import 'package:tmdb/herocard.dart';
 import 'package:tmdb/models.dart';
@@ -45,8 +46,31 @@ class _HomeState extends State<Home> {
     return SafeArea(
       child: Scaffold(
         appBar: AppBar(
+          toolbarHeight: 100.h,
           backgroundColor: Colors.black,
           centerTitle: true,
+          leading: Builder(
+            builder: (context) => IconButton(
+              icon: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                child: Icon(Icons.menu, color: Colors.yellow, size: 40.h),
+              ),
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
+            ),
+          ),
+          actions: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: IconButton(
+                icon: Icon(Icons.search, color: Colors.yellow, size: 40.h),
+                onPressed: () {
+                  print("Search clicked");
+                },
+              ),
+            ),
+          ],
           title: Text(
             'TMDB',
             style: TextStyle(
@@ -56,6 +80,43 @@ class _HomeState extends State<Home> {
             ),
           ),
         ),
+        drawer: Drawer(
+          width: 250.w,
+          backgroundColor: Colors.black,
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: [
+              SizedBox(height: 400.h),
+              ListTile(
+                leading: Icon(Icons.bookmark, color: Colors.yellow, size: 60.h),
+                title: Text(
+                  "Bookmarked",
+                  style: TextStyle(fontSize: 20.h, color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          Bookmarked(),
+
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+
+                      transitionDuration: Duration(milliseconds: 300),
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+
         backgroundColor: Colors.black,
         body: ListView(
           children: [

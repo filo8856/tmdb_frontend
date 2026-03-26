@@ -10,6 +10,7 @@ void main() async {
   try {
     Movies = await ApiService.fetchMovies();
     Genres = await ApiService.fetchGen();
+    bookmarked = await BookmarkStorage.getBookmarks();
   } catch (e) {
     print("Error loading data: $e");
   }

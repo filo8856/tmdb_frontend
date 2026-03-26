@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:tmdb/fetch.dart';
+import 'package:tmdb/models.dart';
 
 class Desc extends StatefulWidget {
   final int id;
@@ -41,7 +42,45 @@ class _DescState extends State<Desc> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        appBar: AppBar(backgroundColor: Colors.black),
+        appBar: AppBar(
+          backgroundColor: Colors.black,
+          leading: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 10.w),
+            child: IconButton(
+              icon: Icon(Icons.arrow_back, color: Colors.yellow, size: 40.h),
+              onPressed: () {
+                Navigator.pop(context, true); // 🔥 tell previous screen to refresh
+                print("Search clicked");
+              },
+            ),
+          ),
+          toolbarHeight: 100.h,
+          actions: [
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 10.w),
+              child: IconButton(
+                icon: Icon(
+                  checkbook((widget.id).toString())
+                      ? Icons.bookmark
+                      : Icons.bookmark_outline,
+                  color: Colors.yellow,
+                  size: 40.h,
+                ),
+                onPressed: () async {
+                  if (checkbook((widget.id).toString())) {
+                    bookmarked.remove((widget.id).toString());
+                  } else {
+                    bookmarked.add((widget.id).toString());
+                  }
+                  await BookmarkStorage.saveBookmarks();
+                  print(bookmarked);
+                  setState(() {});
+                },
+              ),
+            ),
+          ],
+        ),
+
         backgroundColor: Colors.black,
         body: isLoading
             ? const Center(
@@ -273,5 +312,10 @@ class _DescState extends State<Desc> {
               ),
       ),
     );
+  }
+
+  bool checkbook(String id) {
+    for (var x in bookmarked) if (x == id) return true;
+    return false;
   }
 }
