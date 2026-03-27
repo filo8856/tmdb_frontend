@@ -49,12 +49,14 @@ class _DescState extends State<Desc> {
             child: IconButton(
               icon: Icon(Icons.arrow_back, color: Colors.yellow, size: 40.h),
               onPressed: () {
-                Navigator.pop(context, true); // 🔥 tell previous screen to refresh
+                Navigator.pop(
+                  context,
+                  true,
+                ); // 🔥 tell previous screen to refresh
                 print("Search clicked");
               },
             ),
           ),
-          toolbarHeight: 100.h,
           actions: [
             Padding(
               padding: EdgeInsets.symmetric(horizontal: 10.w),
@@ -86,22 +88,32 @@ class _DescState extends State<Desc> {
             ? const Center(
                 child: CircularProgressIndicator(color: Colors.yellow),
               )
-            : Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Center(
-                      child: Container(
-                        height: 200.h,
-                        width: 350.w,
-                        color: Colors.white,
+            : Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Stack(
+                    children: [
+                      SizedBox(
+                        height: 232.h,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: Colors.yellow,
+                          ),
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 30.h),
+                      Image.network(
+                        movie?['backdrop_url'] ?? "",
+                        width: double.infinity,
+                        fit: BoxFit.cover, // 🔥 key
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 30.h),
 
-                    // 🎬 Title
-                    Text(
+                  // 🎬 Title
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Text(
                       movie?['title'] ?? "No Title",
                       textAlign: TextAlign.center,
                       style: TextStyle(
@@ -110,11 +122,14 @@ class _DescState extends State<Desc> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+                  ),
 
-                    SizedBox(height: 8.h),
+                  SizedBox(height: 8.h),
 
-                    // 📅 Year • ⏱ Runtime • ⭐ Rating
-                    Text(
+                  // 📅 Year • ⏱ Runtime • ⭐ Rating
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 20.w),
+                    child: Text(
                       "${movie?['release_year'] ?? '-'} • "
                       "${movie?['runtime_mins'] ?? '-'} mins • "
                       "${movie?['rating'] ?? '-'} ⭐",
@@ -125,8 +140,11 @@ class _DescState extends State<Desc> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Expanded(
-                      child: SingleChildScrollView(
+                  ),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 20.w),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -307,8 +325,8 @@ class _DescState extends State<Desc> {
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
       ),
     );
