@@ -93,6 +93,7 @@ class _DescState extends State<Desc> {
                 children: [
                   Stack(
                     children: [
+                       movie?['backdrop_url'] != null?
                       SizedBox(
                         height: 232.h,
                         child: Center(
@@ -100,12 +101,14 @@ class _DescState extends State<Desc> {
                             color: Colors.yellow,
                           ),
                         ),
-                      ),
-                      Image.network(
-                        movie?['backdrop_url'] ?? "",
-                        width: double.infinity,
-                        fit: BoxFit.cover, // 🔥 key
-                      ),
+                      ):SizedBox(),
+                      movie?['backdrop_url'] != null
+                          ? Image.network(
+                              movie?['backdrop_url'] ?? "",
+                              width: double.infinity,
+                              fit: BoxFit.cover, // 🔥 key
+                            )
+                          : SizedBox(),
                     ],
                   ),
                   SizedBox(height: 30.h),

@@ -8,6 +8,7 @@ class Movie {
   final int runtimeMins;
   final String rating;
   final String posterUrl;
+  final String backdropUrl;
   final String genres;
 
   Movie({
@@ -17,6 +18,7 @@ class Movie {
     required this.runtimeMins,
     required this.rating,
     required this.posterUrl,
+    required this.backdropUrl,
     required this.genres,
   });
 
@@ -28,6 +30,7 @@ class Movie {
       runtimeMins: json['runtime_mins'] ?? 0,
       rating: json['rating']?.toString() ?? '0.0',
       posterUrl: json['poster_url'] ?? '',
+      backdropUrl: json['backdrop_url'] ?? '',
       genres: json['genres'] ?? '',
     );
   }
