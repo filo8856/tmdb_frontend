@@ -14,7 +14,7 @@ class MovieCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100.w,
+      height:200.h,
       margin: EdgeInsets.symmetric(horizontal: 5.w, vertical: 10.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -24,7 +24,6 @@ class MovieCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.r),
             child: Container(
               height: 150.h,
-              width: 100.w,
               color: Colors.grey.shade200,
               child: Image.network(
                 imageUrl,
@@ -37,15 +36,18 @@ class MovieCard extends StatelessWidget {
 
           // 🎬 Title
           Flexible(
-            child: Text(
-              title,
-              style: TextStyle(
-                fontSize: 14.w,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
+            child: SizedBox(
+              width:100.h,
+              child: Text(
+                title,
+                style: TextStyle(
+                  fontSize: 14.h,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
         ],

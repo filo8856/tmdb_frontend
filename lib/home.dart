@@ -191,7 +191,7 @@ class _HomeState extends State<Home> {
                           genre,
                           style: TextStyle(
                             color: isSelected ? Colors.black : Colors.white,
-                            fontSize: 13.w,
+                            fontSize: 13.h,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -286,7 +286,7 @@ class _HomeState extends State<Home> {
                           child: Text(
                             genre,
                             style: TextStyle(
-                              fontSize: 18.w,
+                              fontSize: 18.h,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),

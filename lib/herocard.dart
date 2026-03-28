@@ -28,12 +28,7 @@ class BigMovieCard extends StatelessWidget {
           child: Stack(
             children: [
               // 🖼️ Background
-              Positioned.fill(
-                child: Image.network(
-                  imageUrl,
-                  fit: BoxFit.fill,
-                ),
-              ),
+              Positioned.fill(child: Image.network(imageUrl, fit: BoxFit.fill)),
 
               // 🌑 Gradient
               Positioned.fill(
@@ -64,7 +59,7 @@ class BigMovieCard extends StatelessWidget {
                       title,
                       style: TextStyle(
                         color: Colors.white,
-                        fontSize: 22.w,
+                        fontSize: 22.h,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -79,7 +74,7 @@ class BigMovieCard extends StatelessWidget {
                             "$genres • $year • ⭐ $rating",
                             style: TextStyle(
                               color: Colors.white70,
-                              fontSize: 12.w,
+                              fontSize: 12.h,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
