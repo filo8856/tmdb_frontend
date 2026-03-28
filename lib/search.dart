@@ -19,7 +19,7 @@ class _SearchState extends State<Search> {
       query = value;
 
       filtered = Movies.where((movie) {
-        return movie.title.toLowerCase().contains(query.toLowerCase());
+        return (movie.title.toLowerCase().contains(query.toLowerCase()) || movie.genres.toLowerCase().contains(query.toLowerCase()));
       }).toList();
     });
   }
