@@ -4,7 +4,7 @@ import 'package:tmdb/models.dart';
 
 class ApiService {
   static const String baseUrl =
-      "https://movie-database-backend-production-975e.up.railway.app";
+      "https://movie-database-backend-cyvf.onrender.com";
 
   static Future<List<Movie>> fetchMovies() async {
     final response = await http.get(Uri.parse('$baseUrl/movies/'));
@@ -39,6 +39,24 @@ class ApiService {
       );
     } else {
       throw Exception('Failed to load genres');
+    }
+  }
+
+  static Future<List<int>> aiSearchIds(String question) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/ai/search'),
+      headers: {"Content-Type": "application/json"},
+      body: jsonEncode({"question": question}),
+    );
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+
+      final List results = data['results'];
+
+      return results.map((e) => e['movie_id'] as int).toList();
+    } else {
+      throw Exception('AI search failed');
     }
   }
 }

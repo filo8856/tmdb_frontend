@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:tmdb/aisearch.dart';
 import 'package:tmdb/bookmarked.dart';
 import 'package:tmdb/desc.dart';
 import 'package:tmdb/herocard.dart';
@@ -145,6 +146,32 @@ class _HomeState extends State<Home> {
                     PageRouteBuilder(
                       pageBuilder: (context, animation, secondaryAnimation) =>
                           Bookmarked(),
+
+                      transitionsBuilder:
+                          (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(
+                              opacity: animation,
+                              child: child,
+                            );
+                          },
+
+                      transitionDuration: Duration(milliseconds: 300),
+                    ),
+                  );
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.search, color: Colors.yellow, size: 60.h),
+                title: Text(
+                  "AI Search",
+                  style: TextStyle(fontSize: 20.h, color: Colors.white),
+                ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    PageRouteBuilder(
+                      pageBuilder: (context, animation, secondaryAnimation) =>
+                          AiSearch(),
 
                       transitionsBuilder:
                           (context, animation, secondaryAnimation, child) {
